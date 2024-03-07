@@ -656,8 +656,8 @@ Ammo_AV_Hex  = byte(0x106c00)
    && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
  )
 
- achievement ( title = "Dot's Diner: HOTTEST Food in Mainframe...?"
-  description = "Witness Level 1's Bad Ending. See what other canon breaking endings you can find!"
+ achievement ( title = "Dot's Diner: HOTTEST Food in Mainframe...?",
+  description = "Witness Level 1's Bad Ending. See what other canon breaking endings you can find!",
   points = 1,
   trigger = 
    sector_ID() == Baudway // Checks if Sector is correct
@@ -671,3 +671,45 @@ Ammo_AV_Hex  = byte(0x106c00)
  
 
 // achievement ( title = "There's Non-Canon, And Then There's NON-CANON - Witness one of the unique Game Over FMVs. See what other canon-shattering Game Overs you can find!")
+
+// ==========================================
+// [CHEEV-BAUD] Baudway-Specific Achievements
+// ==========================================
+
+  // --------------------------
+  // Level 1 Relevant Addresses
+  // --------------------------
+
+EnemyHP_Lv1_ABC = word(0x15a7f6)
+
+  // ----------------
+  // Level 1 Cheevos
+  // ----------------
+
+ achievement ( title = "Where DOES He Get Those ABCs?",
+  description = "Destroy the Armored Binome Carrier in Level 1",
+  points = 2,
+  trigger =
+   sector_ID() == Baudway && level_ID() == Lv1 // Check for correct Sector and Level IDs
+   && Gameplay_Active()
+   && (EnemyHP_Lv1_ABC == 0x0 || EnemyHP_Lv1_ABC > 0x8000) // Due to occasionally underflowing HP, it is set to trigger on either 0 or underflow.
+ )
+ 
+ achievement ( title = "Log Off, Mike!",
+  description = "Complete Level 1 without taking damage",
+  points = 10,
+  trigger =
+   sector_ID() == Baudway && level_ID() == Lv1 // Check for correct Sector and Level IDs
+   && Gameplay_Active()
+   && once(HP_Baudway == prev(word(0x106EA2)))
+   && (once(Frames_Cutscene() >= End_Primer))// Checks if the Cutscene Timer has begun to increment
+   && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
+   && never(Gameplay_Active()) // Checks that gameplay is inactive
+   && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+   )
+   
+   //ToDo - Figure out why I can't replace HP value with a text variable. The achievement should be locked out upon taking any damage, only resettable on fully resetting the level.
+  
+
+
+
