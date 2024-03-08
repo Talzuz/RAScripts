@@ -208,13 +208,13 @@ EndingState_Lv19 = dword(0x45f28)
 // But even getting to 99 would likely mean you're a Cheater, Cheater, Null Eater. There's a reason they didn't bother to cap it.
 // I cannot find a discernable pattern to where these values are listed.
 
-Lives_Baudway = word(0x112f50)
-Lives_CitE = word(0x1120c0)
-Lives_BevHills = word(0x113014)
-Lives_Kits = word(0x1149fc)
-Lives_FPP = word(0x1120a4)
-Lives_GPrime = word(0x11941c)
-Lives_Hex = word(0x106cbc)
+ function Lives_Baudway() => word(0x112f50)
+ function Lives_CitE() => word(0x1120c0)
+ function Lives_BevHills() => word(0x113014)
+ function Lives_Kits() => word(0x1149fc)
+ function Lives_FPP() => word(0x1120a4)
+ function Lives_GPrime() => word(0x11941c)
+ function Lives_Hex() => word(0x106cbc)
 	 
 // ======================
 // [HEALTH] Player Health
@@ -228,13 +228,16 @@ Lives_Hex = word(0x106cbc)
   // $14D (333) - RED 
     // (Begins giving a warning beep at $12B (299))
 
- HP_Baudway = 0x106ea2
- HP_CitE = 0x1061e6
- HP_BevHills = 0x106d7e
- HP_Kits = 0x108a0e
- HP_FPP = 0x15338a
- HP_GPrime = 0x10ce4a
- HP_Hex = 0xfb32a 
+ function HP_Baudway() => word(0x106ea2)
+ function HP_CitE() => word(0x1061e6)
+ function HP_BevHills() => word(0x106d7e)
+ function HP_Kits() => word(0x108a0e)
+ function HP_FPP() => word(0x15338a)
+ function HP_GPrime() => word(0x10ce4a)
+ function HP_Hex() => word(0xfb32a )
+   HP_Full = 0x3E8
+   HP_Yellow = 0x29A
+   HP_Danger = 0x12B // Danger zone is when an audible alarm starts beeping.
 
 // =====================
 // [CHEAT] Cheater Flags
@@ -266,6 +269,7 @@ function Char_Enzo() => bit1(0x45ed0) == 1 // ▲ ◄ ▼ ◄ ▼ L1 R1 ► ▼ 
 // ==========================================================================================
 
 // Primary Weapon, shared with Blaster, Rockets, and also used for Grapple when voiding out.
+
 Ammo_Prime_Baudway  = byte(0x11319c)
 Ammo_Prime_CitE  = byte(0x11230c)
 Ammo_Prime_BevHills  = byte(0x113260)
@@ -592,13 +596,13 @@ Ammo_AV_Hex  = byte(0x106c00)
   trigger = 
    Gameplay_Active() // Checks whether gameplay is paused.
    && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
-   && (Lives_Baudway > prev(Lives_Baudway) // Starting here, checks for extra life increment in the different sectors.
-   || Lives_CitE > prev(Lives_CitE)
-   || Lives_BevHills > prev(Lives_BevHills)
-   || Lives_Kits > prev(Lives_Kits)
-   || Lives_FPP > prev(Lives_FPP)
-   || Lives_GPrime > prev(Lives_GPrime)
-   || Lives_Hex > prev(Lives_Hex)) // Sectors end here
+   && (Lives_Baudway() > prev(Lives_Baudway()) // Starting here, checks for extra life increment in the different sectors.
+   || Lives_CitE() > prev(Lives_CitE())
+   || Lives_BevHills() > prev(Lives_BevHills())
+   || Lives_Kits() > prev(Lives_Kits())
+   || Lives_FPP() > prev(Lives_FPP())
+   || Lives_GPrime() > prev(Lives_GPrime())
+   || Lives_Hex() > prev(Lives_Hex())) // Sectors end here
    )
    
  achievement ( title = "My 10 Bobs",
@@ -607,19 +611,16 @@ Ammo_AV_Hex  = byte(0x106c00)
   trigger =
    Gameplay_Active() // Checks whether gameplay is paused.
    && none_of(CheatFlag, cheat => cheat ==1) // Disables achievement if any cheat is active.
-   && ((Lives_Baudway > prev(Lives_Baudway) && Lives_Baudway >= 0x0A) // Starting here, checks for both extra life increment and triggers when life counter hits 10. Just in case, it can trigger at values higher than 10.
-   || Lives_CitE > prev(Lives_CitE) && Lives_CitE >= 0x0A
-   || Lives_BevHills > prev(Lives_BevHills) && Lives_BevHills >= 0x0A
-   || Lives_Kits > prev(Lives_Kits) && Lives_Kits >= 0x0A
-   || Lives_FPP > prev(Lives_FPP) && Lives_Kits >= 0x0A
-   || Lives_GPrime > prev(Lives_GPrime) && Lives_GPrime >= 0x0A
-   || Lives_Hex > prev(Lives_Hex) && Lives_Hex >= 0x0A)
+   && ((Lives_Baudway() > prev(Lives_Baudway()) && Lives_Baudway() >= 0x0A) // Starting here, checks for both extra life increment and triggers when life counter hits 10. Just in case, it can trigger at values higher than 10.
+   || Lives_CitE() > prev(Lives_CitE()) && Lives_CitE() >= 0x0A
+   || Lives_BevHills() > prev(Lives_BevHills()) && Lives_BevHills() >= 0x0A
+   || Lives_Kits() > prev(Lives_Kits()) && Lives_Kits() >= 0x0A
+   || Lives_FPP() > prev(Lives_FPP()) && Lives_FPP() >= 0x0A
+   || Lives_GPrime() > prev(Lives_GPrime()) && Lives_GPrime() >= 0x0A
+   || Lives_Hex() > prev(Lives_Hex()) && Lives_Hex() >= 0x0A)
    )
    
-   
-   
 
- 
 // =====================================
 // [CHEEV_FUN] Just For Fun Achievements
 // =====================================
@@ -676,11 +677,22 @@ Ammo_AV_Hex  = byte(0x106c00)
 // [CHEEV-BAUD] Baudway-Specific Achievements
 // ==========================================
 
+  // ------------------------------
+  // Baudway Relevant Address Names
+  // ------------------------------
+  
+ // HP_Baudway, Lives_Baudway
+ // Ammo_Prime_Baudway, Ammo_Mortar_Baudway, Ammo_Box_Baudway, Ammo_Flame_Baudway, Ammo_Vamp_Baudway, Ammo_AV_Baudway
+ // EndingState_Baudway (EndingState_Lv1, EndingState_Lv2, EndingState_Lv3)
+ // Cutscenes_Baudway
+
+
   // --------------------------
-  // Level 1 Relevant Addresses
+  // Level 1 Specific Addresses
   // --------------------------
 
 EnemyHP_Lv1_ABC = word(0x15a7f6)
+ 
 
   // ----------------
   // Level 1 Cheevos
@@ -690,7 +702,8 @@ EnemyHP_Lv1_ABC = word(0x15a7f6)
   description = "Destroy the Armored Binome Carrier in Level 1",
   points = 2,
   trigger =
-   sector_ID() == Baudway && level_ID() == Lv1 // Check for correct Sector and Level IDs
+   once(sector_ID() == Baudway) && (level_ID() == Lv1) // Check for correct Sector and Level IDs
+   && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
    && Gameplay_Active()
    && (EnemyHP_Lv1_ABC == 0x0 || EnemyHP_Lv1_ABC > 0x8000) // Due to occasionally underflowing HP, it is set to trigger on either 0 or underflow.
  )
@@ -699,17 +712,112 @@ EnemyHP_Lv1_ABC = word(0x15a7f6)
   description = "Complete Level 1 without taking damage",
   points = 10,
   trigger =
-   sector_ID() == Baudway && level_ID() == Lv1 // Check for correct Sector and Level IDs
-   && Gameplay_Active()
-   && once(HP_Baudway == prev(word(0x106EA2)))
-   && (once(Frames_Cutscene() >= End_Primer))// Checks if the Cutscene Timer has begun to increment
-   && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-   && never(Gameplay_Active()) // Checks that gameplay is inactive
+   once(sector_ID() == Baudway) && once(level_ID() == Lv1) // Check for correct Sector and Level IDs
    && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
-   )
-   
-   //ToDo - Figure out why I can't replace HP value with a text variable. The achievement should be locked out upon taking any damage, only resettable on fully resetting the level.
+   && unless(once(HP_Baudway() < HP_Full))
+   && trigger_when(Cutscenes_Baudway == LevelEnd)
+   && (always_false() || never(Frames_Level() == 0x0))
+ ) 
   
 
+ // --------------------------
+ // Level 2 Specific Addresses
+ // --------------------------
+ 
+ // HP for the enemies for the 'destroy all enemies in level 2' achievement.
+ function Enemy_HP_Lv2_ZeroBinome1() => word(0x15e26e)
+ function Enemy_HP_Lv2_ZeroBinome2() => word(0x15e362)
+ function Enemy_HP_Lv2_Turret1() => word(0x15e456)
+ function Enemy_HP_Lv2_Turret2() => word(0x15e536)
+ function Enemy_HP_Lv2_Turret3() => word(0x15e616)
+ function Enemy_HP_Lv2_Turret4() => word(0x15e6f6)
+ function Enemy_HP_Lv2_Turret5() => word(0x15e7d6)
+ function Enemy_HP_Lv2_Turret6() => word(0x15e8b6)
+ function Enemy_HP_Lv2_Turret7() => word(0x15e996)
+ function Enemy_HP_Lv2_Turret8() => word(0x15ea76)
+ function Enemy_HP_Lv2_Turret9() => word(0x15eb56)
+ function Enemy_HP_Lv2_Turret10() => word(0x15ec36)
+ function Enemy_HP_Lv2_Turret11() => word(0x15ed16)
+ function Enemy_HP_Lv2_Forklift1() => word(0x15edf6)
+ function Enemy_HP_Lv2_Forklift2() => word(0x15eeea)
 
+// Collection Array
+ Enemy_HP_Lv2 = [
+  Enemy_HP_Lv2_ZeroBinome1(), Enemy_HP_Lv2_ZeroBinome2(), Enemy_HP_Lv2_Turret1(), Enemy_HP_Lv2_Turret2(),
+  Enemy_HP_Lv2_Turret3(),  Enemy_HP_Lv2_Turret4(), Enemy_HP_Lv2_Turret5(), Enemy_HP_Lv2_Turret6(),
+  Enemy_HP_Lv2_Turret7(), Enemy_HP_Lv2_Turret8(), Enemy_HP_Lv2_Turret9(), Enemy_HP_Lv2_Turret10(),
+  Enemy_HP_Lv2_Turret11(), Enemy_HP_Lv2_Forklift1(), Enemy_HP_Lv2_Forklift2()
+ ]
+ 
+ 
+// -----------------------------
+// Level 2 Specific Achievements
+// -----------------------------
 
+achievement(
+ title = "To Delete and Defend...?",
+ points = 5,
+ description = "Destroy All Enemies in Level 2",
+ trigger = 
+  once(once(sector_ID() == 0x01) && level_ID() == 0x02)
+  && (never(Frames_Level() == 0x0))
+  && (never(Frames_Cutscene() > 0x1000))
+  && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+  && measured(tally(15, (once(once(Enemy_HP_Lv2_ZeroBinome1() >= 0x8000) || Enemy_HP_Lv2_ZeroBinome1() == 0x00)),
+  (once(once(Enemy_HP_Lv2_ZeroBinome2() >= 0x8000) || Enemy_HP_Lv2_ZeroBinome2() == 0x0)),
+  (once(once(Enemy_HP_Lv2_Turret1() == 0x00) || Enemy_HP_Lv2_Turret1() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret2() == 0x00) || Enemy_HP_Lv2_Turret2() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret3() == 0x00) || Enemy_HP_Lv2_Turret3() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret4() == 0x00) || Enemy_HP_Lv2_Turret4() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret5() == 0x00) || Enemy_HP_Lv2_Turret5() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret6() == 0x00) || Enemy_HP_Lv2_Turret6() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret7() == 0x00) || Enemy_HP_Lv2_Turret7() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret8() == 0x00) || Enemy_HP_Lv2_Turret8() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret9() == 0x00) || Enemy_HP_Lv2_Turret9() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret10() == 0x00) || Enemy_HP_Lv2_Turret10() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Turret11() == 0x00) || Enemy_HP_Lv2_Turret11() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Forklift1() == 0x00) || Enemy_HP_Lv2_Forklift1() >= 0x8000)),
+  (once(once(Enemy_HP_Lv2_Forklift2() == 0x00) || Enemy_HP_Lv2_Forklift2() >= 0x8000)))
+  )
+ )
+
+// -----------------------------
+// Level 3 Specific achievements
+// -----------------------------
+
+// Garbage In, Garbage Out
+  // Mend the Second Tear in Level 3 before destroying the sewer creature
+
+// Check if Slugboy's HP is in 'active' zone. (Higher than 1)
+// Trigger when Tear Mended
+
+// Measured tag
+
+// ===========================
+// Cit E-Specific achievements
+// ===========================
+
+// -----------------------------
+// Level 4 Specific Achievements
+// -----------------------------
+
+// They Look Like Game Pucks From Phong'S Favorite Game!
+  // Complete Level 4 without setting off any mines
+  
+// Do Not Taunt
+  // Find the hidden rockets in Level 4
+ 
+ 
+ // -----------------------------
+ // Level 5 Specific Achievements
+ // -----------------------------
+ 
+ // Our Zip-Boards Aren't Doing So Well
+   // Complete Level 5 without falling off the stage
+   
+ // ----
+ // Level 6 Specific Achievements
+ // ----
+ 
+ // Treacherous Dogs!
+  // Complete Level 6 without destroying the MEG-ABC 
