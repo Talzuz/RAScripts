@@ -234,6 +234,7 @@ EndingState_Lv19 = dword(0x45f28)
 // =====================
 
 // Naughty, naughty, using these. No, I didn't use these extensively during development, why would you ask such a thing?!
+// Codes are entered in the main menu.
 
  CheatFlag = [
     bit4(0x45ed0), // < v > < ^ R2 L1 ^ < >   Flight Mode, press Square to Hover
@@ -250,13 +251,14 @@ EndingState_Lv19 = dword(0x45f28)
 
 // For some reason that I just can't figure out, (/s) only one of these can be active at once. 
 // Interestingly, these Character models ONLY appear in this way.
+// Codes are entered in the main menu.
 
 function Char_Dot() => bit0(0x45ed0) == 1 // < R1 > ^ v R2 L1 > ^ v  Play as Dot
 function Char_Enzo() => bit1(0x45ed0) == 1 // ^ < v < v L1 R1 > v >  Play as Enzo
 
 
 // ===================================
-// [HEALTH] Player Health Information
+// [HEALTH] Player Health Information 
 // ===================================
 
 // Legit Maximum HP is $3E8 (1000)
@@ -265,7 +267,7 @@ function Char_Enzo() => bit1(0x45ed0) == 1 // ^ < v < v L1 R1 > v >  Play as Enz
 // HP Displays are as follows:
     // $3E8 (1000) - GREEN
     // $29A (666) - YELLOW
-    // $14D (333) - RED 
+    // $14D (333) - RED   
         // (Begins giving a warning beep at $12B (299))
 
 function HP_Baudway() => word(0x106ea2)
@@ -291,6 +293,157 @@ function Lives_Kits() => word(0x1149fc)
 function Lives_FPP() => word(0x1120a4) 
 function Lives_GPrime() => word(0x11941c) 
 function Lives_Hex() => word(0x106cbc) 
+
+
+// =========================================================
+// [WEAPONS] The thing you point at whatever you want to die
+// =========================================================
+
+// Baudway
+
+    // Primaries
+function Weapon_Pistol1_Baudway() => bit0(0x112f38)
+function Weapon_Pistol2_Baudway() => bit1(0x112f38)
+function Weapon_Pistol3_Baudway() => bit2(0x112f38)
+function Weapon_Blaster1_Baudway() => bit3(0x112f38)
+function Weapon_Blaster2_Baudway() => bit4(0x112f38)
+function Weapon_Blaster3_Baudway() => bit5(0x112f38)
+function Weapon_Rocket1_Baudway() => bit6(0x112f38)
+function Weapon_Rocket2_Baudway() => bit7(0x112f38)
+function Weapon_Rocket3_Baudway() => bit0(0x112f39)
+
+    // Glitch Powers
+function Weapon_Mortar_Baudway() => bit2(0x112f39)
+function Weapon_Flame_Baudway() => bit3(0x112f39)
+function Weapon_Box_Baudway() => bit6(0x112f39)
+function Weapon_Vamp_Baudway() => bit7(0x112f39)
+function Weapon_AV_Baudway() => bit1(0x112f3a)
+
+// Cit E
+
+    // Primaries
+function Weapon_Pistol1_CitE() => bit0(0x1120a8)
+function Weapon_Pistol2_CitE() => bit1(0x1120a8)
+function Weapon_Pistol3_CitE() => bit2(0x1120a8)
+function Weapon_Blaster1_CitE() => bit3(0x1120a8)
+function Weapon_Blaster2_CitE() => bit4(0x1120a8)
+function Weapon_Blaster3_CitE() => bit5(0x1120a8)
+function Weapon_Rocket1_CitE() => bit6(0x1120a8)
+function Weapon_Rocket2_CitE() => bit7(0x1120a8)
+function Weapon_Rocket3_CitE() => bit0(0x1120a9)
+
+    // Glitch Powers
+function Weapon_Mortar_CitE() => bit2(0x1120a9)
+function Weapon_Flame_CitE() => bit3(0x1120a9)
+function Weapon_Box_CitE() => bit6(0x1120a9)
+function Weapon_Vamp_CitE() => bit7(0x1120a9)
+function Weapon_AV_CitE() => bit1(0x1120aa)
+
+
+// Beverly Hills
+
+    // Primaries
+function Weapon_Pistol1_BevHills() => bit0(0x112ffc)
+function Weapon_Pistol2_BevHills() => bit1(0x112ffc)
+function Weapon_Pistol3_BevHills() => bit2(0x112ffc)
+function Weapon_Blaster1_BevHills() => bit3(0x112ffc)
+function Weapon_Blaster2_BevHills() => bit4(0x112ffc)
+function Weapon_Blaster3_BevHills() => bit5(0x112ffc)
+function Weapon_Rocket1_BevHills() => bit6(0x112ffc)
+function Weapon_Rocket2_BevHills() => bit7(0x112ffc)
+function Weapon_Rocket3_BevHills() => bit0(0x112ffd)
+
+    // Glitch Powers
+function Weapon_Mortar_BevHills() => bit2(0x112ffd)
+function Weapon_Flame_BevHills() => bit3(0x112ffd)
+function Weapon_Box_BevHills() => bit6(0x112ffd)
+function Weapon_Vamp_BevHills() => bit7(0x112ffd)
+function Weapon_AV_BevHills() => bit1(0x112ffe)
+
+
+// Kits
+
+    // Primaries
+function Weapon_Pistol1_Kits() => bit0(0x1149e4)
+function Weapon_Pistol2_Kits() => bit1(0x1149e4)
+function Weapon_Pistol3_Kits() => bit2(0x1149e4)
+function Weapon_Blaster1_Kits() => bit3(0x1149e4)
+function Weapon_Blaster2_Kits() => bit4(0x1149e4)
+function Weapon_Blaster3_Kits() => bit5(0x1149e4)
+function Weapon_Rocket1_Kits() => bit6(0x1149e4)
+function Weapon_Rocket2_Kits() => bit7(0x1149e4)
+function Weapon_Rocket3_Kits() => bit0(0x1149e5)
+
+    // Glitch Powers
+function Weapon_Mortar_Kits() => bit2(0x1149e5)
+function Weapon_Flame_Kits() => bit3(0x1149e5)
+function Weapon_Box_Kits() => bit6(0x1149e5)
+function Weapon_Vamp_Kits() => bit7(0x1149e5)
+function Weapon_AV_Kits() => bit1(0x1149e6)
+
+
+// Floating Point Park
+
+    // Primaries
+function Weapon_Pistol1_FPP() => bit0(0x11208c)
+function Weapon_Pistol2_FPP() => bit1(0x11208c)
+function Weapon_Pistol3_FPP() => bit2(0x11208c)
+function Weapon_Blaster1_FPP() => bit3(0x11208c)
+function Weapon_Blaster2_FPP() => bit4(0x11208c)
+function Weapon_Blaster3_FPP() => bit5(0x11208c)
+function Weapon_Rocket1_FPP() => bit6(0x11208c)
+function Weapon_Rocket2_FPP() => bit7(0x11208c)
+function Weapon_Rocket3_FPP() => bit0(0x11208d)
+
+    // Glitch Powers
+function Weapon_Mortar_FPP() => bit2(0x11208d)
+function Weapon_Flame_FPP() => bit3(0x11208d)
+function Weapon_Box_FPP() => bit6(0x11208d)
+function Weapon_Vamp_FPP() => bit7(0x11208d)
+function Weapon_AV_FPP() => bit1(0x11208e)
+
+
+// G-Prime
+
+    // Primaries
+function Weapon_Pistol1_GPrime() => bit0(0x119404)
+function Weapon_Pistol2_GPrime() => bit1(0x119404)
+function Weapon_Pistol3_GPrime() => bit2(0x119404)
+function Weapon_Blaster1_GPrime() => bit3(0x119404)
+function Weapon_Blaster2_GPrime() => bit4(0x119404)
+function Weapon_Blaster3_GPrime() => bit5(0x119404)
+function Weapon_Rocket1_GPrime() => bit6(0x119404)
+function Weapon_Rocket2_GPrime() => bit7(0x119404)
+function Weapon_Rocket3_GPrime() => bit0(0x119405)
+
+    // Glitch Powers
+function Weapon_Mortar_GPrime() => bit2(0x119405)
+function Weapon_Flame_GPrime() => bit3(0x119405)
+function Weapon_Box_GPrime() => bit6(0x119405)
+function Weapon_Vamp_GPrime() => bit7(0x119405)
+function Weapon_AV_GPrime() => bit1(0x119406)
+
+
+// Lost Angles
+
+    // Primaries
+function Weapon_Pistol1_Hex() => bit0(0x106ca4)
+function Weapon_Pistol2_Hex() => bit1(0x106ca4)
+function Weapon_Pistol3_Hex() => bit2(0x106ca4)
+function Weapon_Blaster1_Hex() => bit3(0x106ca4)
+function Weapon_Blaster2_Hex() => bit4(0x106ca4)
+function Weapon_Blaster3_Hex() => bit5(0x106ca4)
+function Weapon_Rocket1_Hex() => bit6(0x106ca4)
+function Weapon_Rocket2_Hex() => bit7(0x106ca4)
+function Weapon_Rocket3_Hex() => bit0(0x106ca5)
+
+    // Glitch Powers
+function Weapon_Mortar_Hex() => bit2(0x106ca5)
+function Weapon_Flame_Hex() => bit3(0x106ca5)
+function Weapon_Box_Hex() => bit6(0x106ca5)
+function Weapon_Vamp_Hex() => bit7(0x106ca5)
+function Weapon_AV_Hex() => bit1(0x106ca6)
+
 
 // ========================================================
 // [AMMO] The things you throw at whatever you want to die
@@ -352,10 +505,6 @@ function Ammo_Box_Hex() => byte(0x106b88) // Box Gun: Temporarily freezes enemie
 function Ammo_Vamp_Hex() => byte(0x106bb0) // Vampire: Drains HP from enemies
 function Ammo_AV_Hex()  => byte(0x106c00) // Anti-Virus Causes turrets to attack other enemies
 
-// ======================
-
-// 
-
 // =====================================
 // [CHEEV_PROG] Progression Achievements
 // =====================================
@@ -364,6 +513,8 @@ achievement(
     title = "What Do I Look Like, a Nanny?!",
     description = "Complete Level 1",
     points = 2,
+    id = 403312,
+    badge = "456249",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv1 // Checks if Level is correct
@@ -377,6 +528,8 @@ achievement(
     title = "Level 31?! No Way!",
     description = "Complete Baudway Sector",
     points = 5,
+    id = 403313,
+    badge = "456258",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv3 // Checks if Level is correct
@@ -391,6 +544,8 @@ achievement(
     title = "It's the ABCs! They've turned on us!",
     description = "Complete Cit E",
     points = 5,
+    id = 403314,
+    badge = "456251",
     trigger =
         sector_ID() == CitE // Checks if Sector is correct
         && level_ID() == Lv6 // Checks if Level is correct
@@ -406,6 +561,8 @@ achievement(
     title = "Don't Let Turbo Find Out",
     description = "Complete Beverly Hills",
     points = 5,
+    id = 403315,
+    badge = "457229",
     trigger =
         sector_ID() == BevHills // Checks if Sector is correct
         && level_ID() == Lv10 // Checks if Level is correct
@@ -420,6 +577,8 @@ achievement(
     title = "Bride of Frankenome",
     description = "Complete Kits Sector",
     points = 5,
+    id = 403311,
+    badge = "456257",
     trigger =
         sector_ID() == Kits // Checks if Sector is correct
         && level_ID() == Lv12 // Checks if Level is correct
@@ -435,6 +594,8 @@ achievement(
     title = "And That’s Their (Non-Canon) Origin Story",
     description = "Complete Floating Point Park",
     points = 10,
+    id = 403316,
+    badge = "456253",
     trigger =
         sector_ID() == FPP // Checks if Sector is correct
         && level_ID() == Lv14 // Checks if Level is correct
@@ -450,6 +611,8 @@ achievement(
     title = "Not a Guitar This Time",
     description = "Complete G-Prime",
     points = 10,
+    id = 403317,
+    badge = "456254",
     trigger =
         sector_ID() == GPrime// Checks if Sector is correct
         && level_ID() == Lv18 // Checks if Level is correct
@@ -474,6 +637,8 @@ achievement(
     title = "Dot's Diner: Fastest Food in Mainframe",
     description = "Complete Level 1 without letting any Tears explode",
     points = 5,
+    id = 403748,
+    badge = "457034",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv1 // Checks if Level is correct
@@ -488,6 +653,8 @@ achievement(
     title = "Slow Food Doesn’t Go Fast. That’s Why It’s Slow",
     description = "Complete Baudway Sector without letting any Tears explode",
     points = 5,
+    id = 403751,
+    badge = "457037",
     trigger = 
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv3 // Checks if Level is correct
@@ -503,6 +670,8 @@ achievement(
     title = "I Say, Binky! Bob's on the Job!",
     description = "Complete Cit E without letting any Tears explode",
     points = 10,
+    id = 403750,
+    badge = "457036",
     trigger =
         sector_ID() == CitE // Checks if Sector is correct
         && level_ID() == Lv6 // Checks if Level is correct
@@ -518,6 +687,8 @@ achievement(
     title = "Trust No One",
     description = "Complete Beverly Hills without letting any Tears explode",
     points = 10,
+    id = 403752,
+    badge = "457038",
     trigger = sector_ID() == BevHills // Checks if Sector is correct
         && level_ID() == Lv10 // Checks if Level is correct
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
@@ -533,6 +704,8 @@ achievement(
     title = "NOT Approved by the BS&P",
     description = "Complete Kits Sector without letting any Tears explode",
     points = 10,
+    id = 403753,
+    badge = "457039",
     trigger =
         sector_ID() == Kits // Checks if Sector is correct
         && level_ID() == Lv12 // Checks if Level is correct
@@ -589,6 +762,8 @@ achievement(
     description = "Win the game with the Good Ending. Wait, did you just nullify everyone?",
     type = "win_condition",
     points = 25,
+    id = 403754,
+    badge = "457040",
     trigger = 
         never(sum_of(EndingState_Final,ending=>prev(ending)) != sum_of(EndingState_Final,ending=>ending)) // Resets whenever a level is cleared
         && tally_of(EndingState_Final,19,ending=>once(ending == EndGood)) // Only triggers when EVERY level has a value of 2 (Good Ending)
@@ -683,6 +858,8 @@ achievement(
     title = "Codemaster",
     description = "Congratulations! You've activated a Cheat Code! All other achievements are locked until you reset. Have fun!",
     points = 0,
+    id = 403755,
+    badge = "457041",
     trigger =
         sector_ID() == Menu && level_ID() == MM // Verifies the user is on the main menu
         && any_of(CheatFlag, cheat => cheat == 1) // Checks if ANY cheat is enabled.)
@@ -740,6 +917,8 @@ EnemyHP_Lv1_ABC = word(0x15a7f6)
 achievement( title = "Where DOES He Get Those ABCs?",
     description = "Destroy the Armored Binome Carrier in Level 1",
     points = 2,
+    id = 403749,
+    badge = "457035",
     trigger =
         once(sector_ID() == Baudway) && (level_ID() == Lv1) // Check for correct Sector and Level IDs
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -753,9 +932,9 @@ achievement( title = "Log Off, Mike!",
     trigger =
         once(sector_ID() == Baudway) && once(level_ID() == Lv1) // Check for correct Sector and Level IDs
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
-        && unless(once(HP_Baudway() < HP_Full))
+        && never(once(HP_Baudway() < HP_Full))
         && trigger_when(Cutscenes_Baudway() == LevelEnd)
-        && (always_false() || never(Frames_Level() == 0x0))
+        && once(Frames_Level() == 0x0)
     )
 
  // =========================================
@@ -826,7 +1005,7 @@ achievement(
     points = 5,
     description = "Mend the Second Tear in Level 3 before destroying the Sewer Creature",
     trigger = once(once(sector_ID() == 0x01) && level_ID() == 0x03)
-    && unless(once(once(EnemyHP_Lv3_Squidboy() == 0x00) || EnemyHP_Lv3_Squidboy() > 0x7FFF)) // Pauses if Squidboy has been destroyed
+    && never(once(once(EnemyHP_Lv3_Squidboy() == 0x00) || EnemyHP_Lv3_Squidboy() > 0x7FFF)) // Pauses if Squidboy has been destroyed
     && trigger_when((once(TearHP_Lv3_Tear2() == 0x00 || TearHP_Lv3_Tear2() > 0x7FFF))) // Triggers when Tear is Mended.
     && Frames_Gameplay() != prev(Frames_Gameplay())
     && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
@@ -844,30 +1023,110 @@ achievement(
   // [CHEEV-LV4] Level 4 Specific Achievements
   // ==========================================
 
+ Mines_Lv4 = [
+    byte(0x150dc1),
+    byte(0x150ea1),
+    byte(0x150f81),
+    byte(0x151061),
+    byte(0x151141),
+    byte(0x151221),
+    byte(0x15122c),
+    byte(0x151301),
+    byte(0x1513e1),
+    byte(0x1514c1),
+    byte(0x1515a1),
+    byte(0x151681),
+    byte(0x151761),
+    byte(0x151841),
+    byte(0x151921),
+    byte(0x151a01),
+    byte(0x151ae1),
+    byte(0x151bc1),
+    byte(0x151ca1),
+    byte(0x151d81),
+    byte(0x151e61),
+    byte(0x151f41),
+    byte(0x152021),
+
+]
+        MineActive = 0x6
+        MineDestroyed = 0x3
+        
+achievement(
+    title = "They Look Like Game Pucks From Phong's Favorite Game!",
+    points = 10,
+    description = "Finish Level 4 without detonating any mines",
+    trigger =
+        once(once(sector_ID() == 0x02) && level_ID() == 0x04)
+        && none_of(Mines_Lv4, mines => mines == MineDestroyed)
+        && Frames_Gameplay() != prev(Frames_Gameplay())
+        && trigger_when(Cutscenes_CitE() == LevelEnd)
+        && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+    )
+
+
+// So I was absolutely DETERMINED to make this achievement work. It took going through the level and finding the memory location of EVERY SINGLE MINE.
 // They Look Like Game Pucks From Phong's Favorite Game!
  // Complete Level 4 without setting off any Mines
 
-// Do Not Taunt
-  // Find the hidden rockets in Level 4
-    // This will require setting a Delta to increment the Rocket value. This is thankfully made easier due to the fact that this is the first opportunity for the player to get rockets.
-    // This will likely trigger alongside the Obtain Rockets achievement, but I figure this one is so out-of-the-way that it's fine.
+achievement(
+    title = "Do Not Taunt",
+    points = 5,
+    description = "Find the hidden Rockets in Level 4",
+    trigger = 
+        once(once(sector_ID() == 0x02) && level_ID() == 0x04)
+        && Frames_Gameplay() != prev(Frames_Gameplay())
+        && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && Weapon_Rocket1_CitE() != prev(Weapon_Rocket1_CitE()) // Checks for new Rockets acquired. Note that this is the EARLIEST point one can obtain the Rockets. If I DID miss one somehow, and it comes up in tickets, this can be fixed by adding an OR statement (alt groups) to this line for Weapon_Rocket2_CitE() and Weapon_Rocket3_CitE().
+    )        
+
+    // This will likely trigger alongside the general Obtain Rockets achievement, but I figure this one is so out-of-the-way that it's fine.
  
  
  // =========================================
  // [CHEEV-LV5] Level 5 Specific Achievements
  // =========================================
  
- // Our Zip-Boards Aren't Doing So Well
-  // Complete Level 5 without falling off the stage
-    // This unfortunately requires some juggling of the cutscene timer, as although voiding out activates the Cutscene Timer, so does using the Vidwindow warps
+ 
+ achievement(
+    title = "Our Zip-Boards Aren't Doing So Well",
+    points = 10,
+    description = "Complete Level 5 without falling off the stage",
+    trigger = 
+        once(once(sector_ID() == 0x02 && once(level_ID() == 0x05))) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once(Frames_Level() == 0x00) // Sets flag when starting level
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && trigger_when(Cutscenes_CitE() == LevelEnd) // Trigger achievement when ending level (icon)
+        && never(Frames_Cutscene() >= 0x8000)
+    )
+    
+    // This unfortunately requires some juggling of the cutscene timer, as although voiding out activates the Cutscene Timer, so does using the Vidwindow warps. The number has to be high enough to only be triggered by voiding out. Thankfully the Vidwindow warps take far less time. But if there are tickets for this achievement, that may be the issue.
 
  // ==========================================
  // [CHEEV-LV6] Level 6 Specific Achievements
  // ==========================================
  
+function BossHP_MegABC() => word(0x166f96)
+function BossTear_MegABC() => word(0x166eaa)
+ 
+ achievement(
+    title = "Treacherous Dogs!",
+    points = 10,
+    description = "Complete Level 6 without destroying the Meg-ABC.",
+    trigger = 
+        once(once(sector_ID() == 0x02 && once(level_ID() == 0x06))) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once(Frames_Level() == 0x00) // Sets flag when starting level
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && never(BossHP_MegABC() == 0x00 || BossHP_MegABC() > 0x8000)
+        && trigger_when((once(BossTear_MegABC() == 0x00 || BossTear_MegABC() > 0x8000))) // Triggers when Tear is Mended.
+    )
  // Treacherous Dogs!
   // Complete Level 6 without destroying the MEG-ABC 
-   // It should be a simple check if the HP is within 'active' zones. The tricky part might be making sure that 0x8000 isn't recognized as being above 0x1.
+   // I can hopefully copy-paste the code from the Squidboy achievement
   
 // ====================================================
 // [CHEEV_BEVHILLS] Beverly Hills-Specific achievements
@@ -884,8 +1143,26 @@ achievement(
   // [CHEEV-LV8] Level 8 Specific Achievements
   // ==========================================
   
-  // I Don't Believe in Deletion (This Time)
-   // Mend the First Tear in Level 8 without destroying any of the guards
+ function TearHP_Lv8_Tear1() => word(0x159786)
+ function EnemyHP_Lv8_Guard1() => word(0x15b532)
+ function EnemyHP_Lv8_Guard2() => word(0x15b626)
+ function EnemyHP_Lv8_Guard3() => word(0x15b71a)
+
+achievement(
+    title = "I Don't Believe In Deletion (This Time)",
+    points = 5,
+    description = "Mend the first Tear in Level 8 without destroying any of the guards",
+    trigger = once(once(sector_ID() == 0x03) && level_ID() == 0x08)
+        && never(once(once(EnemyHP_Lv8_Guard1() == 0x00) || EnemyHP_Lv8_Guard1() > 0x7FFF)) // Deactivates if any guard is destroyed
+        && never(once(once(EnemyHP_Lv8_Guard2() == 0x00) || EnemyHP_Lv8_Guard2() > 0x7FFF)) 
+        && never(once(once(EnemyHP_Lv8_Guard3() == 0x00) || EnemyHP_Lv8_Guard3() > 0x7FFF))
+        && trigger_when((once(TearHP_Lv8_Tear1() == 0x00 || TearHP_Lv8_Tear1() > 0x7FFF))) // Triggers when Tear is Mended.
+        && Frames_Gameplay() != prev(Frames_Gameplay())
+        && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+    )
+      
+  
     // A simple check to see if the Tear is mended (made simpler that it's the first Tear of the level), while the three guards are still active.
   
   // ==========================================
@@ -897,10 +1174,22 @@ achievement(
   // ===========================================
   // [CHEEV-LV10] Level 10 Specific Achievements
   // ===========================================
+ 
+ function BossTear_Web() => word(0x14dfd2) 
   
-  // A Piggyback Function?! No!
-   // In Level 10, don't let your health drop to Yellow
-    // Code-wise, simple enough. Gameplay-wise, when you're in 'outdoor areas', you're constantly bombarded by Web Spores. You'll have to avoid them and pick up health packs if you want this.
+ achievement(
+    title = "Do You Know What the Guardian Protocol Is for Finding a Web Creature in a System like Mainframe?",
+    points = 10,
+    description = "Finish Level 10 without letting your health drop to yellow",
+    trigger = 
+        once(once(sector_ID() == 0x03) && level_ID() == 0x0a)
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && (never(Frames_Level() == 0x00)) // Resets when level is restarted
+        && trigger_when((once(BossTear_Web() == 0x00 || BossTear_Web() > 0x8000))) // Tear Status (Web Creature's HP has no bearing. Do fix if someone manages to glitch past the Web Creature.) 
+        && none_of(CheatFlag, cheat => cheat == 1) // Cheat Flags
+        && never(once(HP_BevHills() <= HP_Yellow)) // Make sure HP doesn't drop to yellow (666)
+    )
+  
   
 // =======================================
 // [CHEEV_KITS] Kits-Specific achievements
