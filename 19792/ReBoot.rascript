@@ -10,6 +10,7 @@
         // [FRAMES] Frames
         // [SEC_ID] Sector ID
         // [LEV_ID] Level ID
+        // [TIMER] The on-screen timer for Tears
         // [CUTSCENES] Status of Tears and End-of-Level states
         // [END_STATE] Status of individual level endings
         // [CHEAT] Naughty little cheater.
@@ -24,32 +25,33 @@
         // [CHEEV_VICT] Victory Conditions (any of these = beat)
         // [CHEEV_COLLECT] Collectables - General obtaining Lives, Weapons, Upgrades, etc.
         // [CHEEV_FUN] Just-for-Fun, includes bad endings, etc.
-    // [CHEEV_BAUD] Baudway Specific Achievements
-        // [CHEEV_LV1]
-        // [CHEEV_LV2]
-        // [CHEEV_LV3]
+        // [CHEEV_CHALLENGE] Challenge Achievements through the whole game
+        // [CHEEV_BAUD] Baudway Specific Achievements
+            // [CHEEV_LV1]
+            // [CHEEV_LV2]
+            // [CHEEV_LV3]
     // [CHEEV_CITE] Cit-E Specific Achievements
-        // [CHEEV_LV4]
-        // [CHEEV_LV5]
-        // [CHEEV_LV6] (Meg-ABC Boss)
+            // [CHEEV_LV4]
+            // [CHEEV_LV5]
+            // [CHEEV_LV6] (Meg-ABC Boss)
     // [CHEEV_BEVHILLS] Beverly Hills Specific Achievements
-        // [CHEEV_LV7]
-        // [CHEEV_LV8]
-        // [CHEEV_LV9]
-        // [CHEEV_LV10] (Web Creature Boss)
+            // [CHEEV_LV7]
+            // [CHEEV_LV8]
+            // [CHEEV_LV9]
+            // [CHEEV_LV10] (Web Creature Boss)
     // [CHEEV_KITS] Kits Specific Achievements
-        // [CHEEV_LV11]
-        // [CHEEV_LV12] (Giant Binome Boss)
+            // [CHEEV_LV11]
+            // [CHEEV_LV12] (Giant Binome Boss)
     // [CHEEV_FPP] Floating Point Park Specific Achievements
-        // [CHEEV_LV13]
-        // [CHEEV_LV14] (Clash Boss)
+            // [CHEEV_LV13]
+            // [CHEEV_LV14] (Clash Boss)
     // [CHEEV_GPRIME] G-Prime Specific Achievements
-        // [CHEEV_LV15]
-        // [CHEEV_LV16]
-        // [CHEEV_LV17]
-        // [CHEEV_LV18] (Megabyte Boss)
+            // [CHEEV_LV15]
+            // [CHEEV_LV16]
+            // [CHEEV_LV17]
+            // [CHEEV_LV18] (Megabyte Boss)
     // [CHEEV_HEX] Lost Angles Specific Achievements
-        // [CHEEV_LV19] (Hexadecimal Boss)
+            // [CHEEV_LV19] (Hexadecimal Boss)
 
 
 // =======================
@@ -134,6 +136,19 @@ function level_ID() => dword(0x45ec8)
  Lv18 = 0x12 // G-Prime 4 (Level 18) (Megabyte Boss)
  Lv19 = 0x13 // Lost Angles (Level 19) (Hexadecimal Boss)
 
+// ========================
+// [TIMER] On-Screen Timers
+// ========================
+
+ScreenTimers = [
+ScreenTimer_Baudway => dword(0x1131d8),
+ScreenTimer_CitE => dword(0x112348),
+ScreenTimer_BevHills => dword(0x11329c),
+ScreenTimer_Kits => dword(0x114c80),
+ScreenTimer_FPP => dword(0x11232c),
+ScreenTimer_GPrime => dword(0x1196a0)
+]
+
 // ================================
 // [CUTSCENES] Tear/Cutscene Values
 // ================================
@@ -153,13 +168,22 @@ function Cutscenes_GPrime() => byte(0x118614)
   Dead = 0x4 // Player has died, lose a life, respawn
   TearMend = 0x7 // Tear is Mended. Resets to $1 when the next Tear forms
   LevelEnd = 0xF // Level Complete
+  
+  TearStatus = [
+  Cutscenes_Baudway(),
+  Cutscenes_CitE(),  
+  Cutscenes_BevHills(),
+  Cutscenes_Kits(),
+  Cutscenes_FPP(),
+  Cutscenes_GPrime(),
+  ]
 
 // ==========================
 // [END_STATE] Ending States 
 // ==========================
 
 // Flags that check the individual level ending states for Good/Bad endings.
- 
+
 // The game has multiple endings. The only way to get the best ending is to mend all the Tears in the levels without letting any of them explode.
 // Letting Tears explode in 1-5 levels triggers the Bad Ending.
 // Letting Tears explode in more than 5 triggers the Ugly Ending.
@@ -228,7 +252,6 @@ EndingState_Lv19 = dword(0x45f28)
     
 ]
 
-
 // =====================
 // [CHEAT] Cheater Flags
 // =====================
@@ -255,7 +278,6 @@ EndingState_Lv19 = dword(0x45f28)
 
 function Char_Dot() => bit0(0x45ed0) == 1 // < R1 > ^ v R2 L1 > ^ v  Play as Dot
 function Char_Enzo() => bit1(0x45ed0) == 1 // ^ < v < v L1 R1 > v >  Play as Enzo
-
 
 // ===================================
 // [HEALTH] Player Health Information 
@@ -294,7 +316,6 @@ function Lives_FPP() => word(0x1120a4)
 function Lives_GPrime() => word(0x11941c) 
 function Lives_Hex() => word(0x106cbc) 
 
-
 // =========================================================
 // [WEAPONS] The thing you point at whatever you want to die
 // =========================================================
@@ -319,6 +340,17 @@ function Weapon_Box_Baudway() => bit6(0x112f39)
 function Weapon_Vamp_Baudway() => bit7(0x112f39)
 function Weapon_AV_Baudway() => bit1(0x112f3a)
 
+Weapons_Baudway = [
+Weapon_Pistol3_Baudway(),
+Weapon_Blaster3_Baudway(),
+Weapon_Rocket3_Baudway(),
+Weapon_Mortar_Baudway(),
+Weapon_Flame_Baudway(),
+Weapon_Box_Baudway(),
+Weapon_Vamp_Baudway(),
+Weapon_AV_Baudway()
+]
+
 // Cit E
 
     // Primaries
@@ -339,6 +371,16 @@ function Weapon_Box_CitE() => bit6(0x1120a9)
 function Weapon_Vamp_CitE() => bit7(0x1120a9)
 function Weapon_AV_CitE() => bit1(0x1120aa)
 
+Weapons_CitE = [
+Weapon_Pistol3_CitE(),
+Weapon_Blaster3_CitE(),
+Weapon_Rocket3_CitE(),
+Weapon_Mortar_CitE(),
+Weapon_Flame_CitE(),
+Weapon_Box_CitE(),
+Weapon_Vamp_CitE(),
+Weapon_AV_CitE()
+]
 
 // Beverly Hills
 
@@ -360,6 +402,16 @@ function Weapon_Box_BevHills() => bit6(0x112ffd)
 function Weapon_Vamp_BevHills() => bit7(0x112ffd)
 function Weapon_AV_BevHills() => bit1(0x112ffe)
 
+Weapons_BevHills = [
+Weapon_Pistol3_BevHills(),
+Weapon_Blaster3_BevHills(),
+Weapon_Rocket3_BevHills(),
+Weapon_Mortar_BevHills(),
+Weapon_Flame_BevHills(),
+Weapon_Box_BevHills(),
+Weapon_Vamp_BevHills(),
+Weapon_AV_BevHills()
+]
 
 // Kits
 
@@ -381,6 +433,16 @@ function Weapon_Box_Kits() => bit6(0x1149e5)
 function Weapon_Vamp_Kits() => bit7(0x1149e5)
 function Weapon_AV_Kits() => bit1(0x1149e6)
 
+Weapons_Kits = [
+Weapon_Pistol3_Kits(),
+Weapon_Blaster3_Kits(),
+Weapon_Rocket3_Kits(),
+Weapon_Mortar_Kits(),
+Weapon_Flame_Kits(),
+Weapon_Box_Kits(),
+Weapon_Vamp_Kits(),
+Weapon_AV_Kits()
+]
 
 // Floating Point Park
 
@@ -402,6 +464,16 @@ function Weapon_Box_FPP() => bit6(0x11208d)
 function Weapon_Vamp_FPP() => bit7(0x11208d)
 function Weapon_AV_FPP() => bit1(0x11208e)
 
+Weapons_FPP = [
+Weapon_Pistol3_FPP(),
+Weapon_Blaster3_FPP(),
+Weapon_Rocket3_FPP(),
+Weapon_Mortar_FPP(),
+Weapon_Flame_FPP(),
+Weapon_Box_FPP(),
+Weapon_Vamp_FPP(),
+Weapon_AV_FPP()
+]
 
 // G-Prime
 
@@ -423,7 +495,16 @@ function Weapon_Box_GPrime() => bit6(0x119405)
 function Weapon_Vamp_GPrime() => bit7(0x119405)
 function Weapon_AV_GPrime() => bit1(0x119406)
 
-
+Weapons_GPrime = [
+Weapon_Pistol3_GPrime(),
+Weapon_Blaster3_GPrime(),
+Weapon_Rocket3_GPrime(),
+Weapon_Mortar_GPrime(),
+Weapon_Flame_GPrime(),
+Weapon_Box_GPrime(),
+Weapon_Vamp_GPrime(),
+Weapon_AV_GPrime()
+]
 // Lost Angles
 
     // Primaries
@@ -444,6 +525,83 @@ function Weapon_Box_Hex() => bit6(0x106ca5)
 function Weapon_Vamp_Hex() => bit7(0x106ca5)
 function Weapon_AV_Hex() => bit1(0x106ca6)
 
+Weapons_Hex = [
+Weapon_Pistol3_Hex(),
+Weapon_Blaster3_Hex(),
+Weapon_Rocket3_Hex(),
+Weapon_Mortar_Hex(),
+Weapon_Flame_Hex(),
+Weapon_Box_Hex(),
+Weapon_Vamp_Hex(),
+Weapon_AV_Hex()
+]
+
+Weapons_Mortar = [
+Weapon_Mortar_Baudway(),
+Weapon_Mortar_CitE(),
+Weapon_Mortar_BevHills(),
+Weapon_Mortar_Kits(),
+Weapon_Mortar_FPP(),
+Weapon_Mortar_GPrime(),
+Weapon_Mortar_Hex()
+]
+
+Weapons_Flame = [
+Weapon_Flame_Baudway(),
+Weapon_Flame_CitE(),
+Weapon_Flame_BevHills(),
+Weapon_Flame_Kits(),
+Weapon_Flame_FPP(),
+Weapon_Flame_GPrime(),
+Weapon_Flame_Hex()
+]
+
+Weapons_Box = [
+Weapon_Box_Baudway(),
+Weapon_Box_CitE(),
+Weapon_Box_BevHills(),
+Weapon_Box_Kits(),
+Weapon_Box_FPP(),
+Weapon_Box_GPrime(),
+Weapon_Box_Hex()
+]
+
+Weapons_Vamp = [
+Weapon_Vamp_Baudway(),
+Weapon_Vamp_CitE(),
+Weapon_Vamp_BevHills(),
+Weapon_Vamp_Kits(),
+Weapon_Vamp_FPP(),
+Weapon_Vamp_GPrime(),
+Weapon_Vamp_Hex()
+]
+Weapons_AV = [
+Weapon_AV_Baudway(),
+Weapon_AV_CitE(),
+Weapon_AV_BevHills(),
+Weapon_AV_Kits(),
+Weapon_AV_FPP(),
+Weapon_AV_GPrime(),
+Weapon_AV_Hex()
+]
+Weapons_Blaster = [
+Weapon_Blaster1_Baudway(),
+Weapon_Blaster1_CitE(),
+Weapon_Blaster1_BevHills(),
+Weapon_Blaster1_Kits(),
+Weapon_Blaster1_FPP(),
+Weapon_Blaster1_GPrime(),
+Weapon_Blaster1_Hex()
+]
+
+Weapons_Rocket = [
+Weapon_Rocket1_CitE(),
+Weapon_Rocket1_BevHills(),
+Weapon_Rocket1_Kits(),
+Weapon_Rocket1_FPP(),
+Weapon_Rocket1_GPrime(),
+Weapon_Rocket1_Hex()
+]
 
 // ========================================================
 // [AMMO] The things you throw at whatever you want to die
@@ -819,7 +977,8 @@ achievement(
     description = "Collect an Extra Life.",
     points = 2,
     trigger = 
-        Gameplay_Active() // Checks whether gameplay is paused.
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && (never(Frames_Level() == 0x00)) // Resets when level is restarted
         && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
         && (Lives_Baudway() > prev(Lives_Baudway()) // Starting here, checks for extra life increment in the different sectors.
             || Lives_CitE() > prev(Lives_CitE())
@@ -828,15 +987,15 @@ achievement(
             || Lives_FPP() > prev(Lives_FPP())
             || Lives_GPrime() > prev(Lives_GPrime())
             || Lives_Hex() > prev(Lives_Hex()) // Sectors end here
-        )
-    )
+        ))
    
 achievement (
     title = "My 10 Bobs",
     description = "Have 10 Lives in Stock. Remember to backup your files!",
     points = 10,
     trigger =
-        Gameplay_Active() // Checks whether gameplay is paused.
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && (never(Frames_Level() == 0x00)) // Resets when level is restarted
         && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
         && ((Lives_Baudway() > prev(Lives_Baudway()) && Lives_Baudway() >= 0x0A ) // Starting here, checks for both extra life increment and triggers when life counter hits 10. Just in case, it can trigger at values higher than 10.
             || Lives_CitE() > prev(Lives_CitE()) && Lives_CitE() >= 0x0A
@@ -848,7 +1007,92 @@ achievement (
         )
     )
 
-// I had thought of a 20-life achievement, but that would require a perfect no-death run. Might be potential in a subset.
+achievement (
+    title = "Grenades of Courage, Wisdom, and Power",
+    description = "Obtain Mortar.",
+    points = 2,
+    trigger =
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Mortar, boom => boom == 1)
+    )
+    
+achievement (
+    title = "I Vant to Leech Your Data!",
+    description = "Obtain Vampire.",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Vamp, bleh => bleh == 1)
+    )
+    
+achievement (
+    title = "His Only Hope: A Firewall!",
+    description = "Obtain Flamethrower",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Flame, whoosh => whoosh == 1)
+    )
+    
+achievement (
+    title = "I Can't Believe It! Trapped in a Stupid Bubble!",
+    description = "Obtain Box Gun",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Box, boing => boing == 1)
+    )
+    
+achievement (
+    title = "Virus Erase Command",
+    description = "Obtain Anti-Virus",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_AV, antique => antique == 1)
+    )
+    
+achievement (
+    title = "Groovy",
+    description = "Obtain Blaster",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Blaster, bang => bang == 1)
+    )
+    
+achievement (
+    title = "You Guys Are Toast!",
+    description = "Obtain Rockets",
+    points = 2,
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && any_of(Weapons_Rocket, woof => woof == 1)
+    )
+
+achievement (
+    title = "It's Only Fun Until Someone Loses an Eye",
+    description = "Obtain all weapons, upgrades, and Glitch items.",
+    points = 10,
+    trigger =
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && never(Frames_Level() == 0x00) // Resets when level is restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
+        && (all_of(Weapons_Baudway, blam => blam == 1)
+        || all_of(Weapons_CitE, blam => blam == 1)
+        || all_of(Weapons_BevHills, blam => blam == 1)
+        || all_of(Weapons_Kits, blam => blam == 1)
+        || all_of(Weapons_FPP, blam => blam == 1)
+        || all_of(Weapons_GPrime, blam => blam == 1)
+        || all_of(Weapons_Hex, blam => blam == 1))
+    )
 
 // =====================================
 // [CHEEV_FUN] Just For Fun Achievements
@@ -902,14 +1146,28 @@ sector_ID() == Baudway // Checks if Sector is correct
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
         && (EndingState_Lv1 == EndBad) // Checks Ending Status
     )
+// =====================================================================
+// [CHEEV_CHALLENGE] - Challenges that don't fit in any specific sector
+// =====================================================================
 
+achievement (
+title = "To Mend and Defend",
+points = 10,
+description = "Mend a Tear within one second of its forming.",
+trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay())
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && any_of(TearStatus, tear => tear == 0x7) // Checks for Tear status.
+        && never(TearStatus, tear => tear == 0x1) // Resets when a Tear spawns
+        && tally,(30(any_of(ScreenTimers, tick => tick == (prev(Frames_Gameplay())))))
+)
 
 // ==========================================
-// [CHEEV-BAUD] Baudway-Specific Achievements
+// [CHEEV_BAUD] Baudway-Specific Achievements
 // ==========================================
 
     // =========================================
-    // [CHEEV-LV1] Level 1 Specific Achievements
+    // [CHEEV_LV1] Level 1 Specific Achievements
     // =========================================
 
 EnemyHP_Lv1_ABC = word(0x15a7f6)
@@ -922,7 +1180,7 @@ achievement( title = "Where DOES He Get Those ABCs?",
     trigger =
         once(sector_ID() == Baudway) && (level_ID() == Lv1) // Check for correct Sector and Level IDs
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
-        && Gameplay_Active()
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
         && (EnemyHP_Lv1_ABC == 0x0 || EnemyHP_Lv1_ABC > 0x8000 ) // Due to occasionally underflowing HP, it is set to trigger on either 0 or underflow.
     )
  
@@ -941,8 +1199,6 @@ achievement( title = "Log Off, Mike!",
  // [CHEEV-LV2] Level 2 Specific Achievements
  // =========================================
  
- // Specific addresses
- 
  // HP for the enemies for the 'destroy all enemies in level 2' achievement.
  function Enemy_HP_Lv2_ZeroBinome1() => word(0x15e26e)
  function Enemy_HP_Lv2_ZeroBinome2() => word(0x15e362)
@@ -960,7 +1216,6 @@ achievement( title = "Log Off, Mike!",
  function Enemy_HP_Lv2_Forklift1() => word(0x15edf6)
  function Enemy_HP_Lv2_Forklift2() => word(0x15eeea)
 
- 
 // =========================================
 // [CHEEV-LV2] Level 2 Specific Achievements
 // =========================================
@@ -974,6 +1229,7 @@ achievement(
         && (never(Frames_Level() == 0x0))
         && (never(Frames_Cutscene() > 0x1000))
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && (unless(once(level_ID() != Lv2))) // Added because the stupid thing flickers in the wrong level sometimes.
         && measured(tally(15,
             (once(once(Enemy_HP_Lv2_ZeroBinome1() == 0x00) || Enemy_HP_Lv2_ZeroBinome1() >= 0x8000)),
             (once(once(Enemy_HP_Lv2_ZeroBinome2() == 0x00) || Enemy_HP_Lv2_ZeroBinome2() >= 0x8000)),
@@ -998,14 +1254,14 @@ achievement(
 // =========================================
 
 function TearHP_Lv3_Tear2() => word(0x15f4aa)
-function EnemyHP_Lv3_Squidboy() => word(0x15ef66)
+function EnemyHP_Lv3_Squidface() => word(0x15ef66)
 
 achievement(
     title = "Garbage In, Garbage Out",
     points = 5,
     description = "Mend the Second Tear in Level 3 before destroying the Sewer Creature",
     trigger = once(once(sector_ID() == 0x01) && level_ID() == 0x03)
-    && never(once(once(EnemyHP_Lv3_Squidboy() == 0x00) || EnemyHP_Lv3_Squidboy() > 0x7FFF)) // Pauses if Squidboy has been destroyed
+    && never(once(once(EnemyHP_Lv3_Squidface() == 0x00) || EnemyHP_Lv3_Squidface() > 0x7FFF)) // Pauses if Squidface has been destroyed
     && trigger_when((once(TearHP_Lv3_Tear2() == 0x00 || TearHP_Lv3_Tear2() > 0x7FFF))) // Triggers when Tear is Mended.
     && Frames_Gameplay() != prev(Frames_Gameplay())
     && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
@@ -1016,8 +1272,6 @@ achievement(
 // =========================================
 // [CHEEV_CITE] Cit E-Specific achievements
 // =========================================
-
-// Relevant memory addresses
 
   // ==========================================
   // [CHEEV-LV4] Level 4 Specific Achievements
@@ -1047,7 +1301,6 @@ achievement(
     byte(0x151e61),
     byte(0x151f41),
     byte(0x152021),
-
 ]
         MineActive = 0x6
         MineDestroyed = 0x3
@@ -1064,11 +1317,7 @@ achievement(
         && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
     )
-
-
-// So I was absolutely DETERMINED to make this achievement work. It took going through the level and finding the memory location of EVERY SINGLE MINE.
-// They Look Like Game Pucks From Phong's Favorite Game!
- // Complete Level 4 without setting off any Mines
+    // So I was absolutely DETERMINED to make this achievement work. It took going through the level and finding the memory location of EVERY SINGLE MINE.
 
 achievement(
     title = "Do Not Taunt",
@@ -1080,8 +1329,7 @@ achievement(
         && (always_false() || (never(Frames_Level() == 0x00))) // Resets when level is restarted
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
         && Weapon_Rocket1_CitE() != prev(Weapon_Rocket1_CitE()) // Checks for new Rockets acquired. Note that this is the EARLIEST point one can obtain the Rockets. If I DID miss one somehow, and it comes up in tickets, this can be fixed by adding an OR statement (alt groups) to this line for Weapon_Rocket2_CitE() and Weapon_Rocket3_CitE().
-    )        
-
+    )
     // This will likely trigger alongside the general Obtain Rockets achievement, but I figure this one is so out-of-the-way that it's fine.
  
  
@@ -1102,7 +1350,6 @@ achievement(
         && trigger_when(Cutscenes_CitE() == LevelEnd) // Trigger achievement when ending level (icon)
         && never(Frames_Cutscene() >= 0x8000)
     )
-    
     // This unfortunately requires some juggling of the cutscene timer, as although voiding out activates the Cutscene Timer, so does using the Vidwindow warps. The number has to be high enough to only be triggered by voiding out. Thankfully the Vidwindow warps take far less time. But if there are tickets for this achievement, that may be the issue.
 
  // ==========================================
@@ -1126,18 +1373,15 @@ function BossTear_MegABC() => word(0x166eaa)
     )
  // Treacherous Dogs!
   // Complete Level 6 without destroying the MEG-ABC 
-   // I can hopefully copy-paste the code from the Squidboy achievement
+   // I can hopefully copy-paste the code from the Squidface achievement
   
 // ====================================================
 // [CHEEV_BEVHILLS] Beverly Hills-Specific achievements
 // ====================================================
   
-
   // ==========================================
   // [CHEEV-LV7] Level 7 Specific Achievements
   // ==========================================
-  
-  
   
   // ==========================================
   // [CHEEV-LV8] Level 8 Specific Achievements
@@ -1199,19 +1443,53 @@ achievement(
   // ===========================================
   // [CHEEV-LV11] Level 11 Specific Achievements
   // ===========================================
-  
-  // Luxo Jr., But Evil
-   // Destroy the Springing Tank in Level 11
-    // Hopefully a simple 'active/destroyed' check.
+
+function EnemyHP_Lv11_Spring() => word(0x169e9a) // Fun fact, this is the last relevant address noted in Code Notes. Isn't this game's memory laid out so perfectly?
+
+ achievement(
+    title = "Luxo Jr., But Evil",
+    points = 5,
+    description = "Destroy the springing tank in Level 11",
+    trigger =
+        (once(once(sector_ID() == 0x04) && level_ID() == 0xb)) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && (never(Frames_Level() == 0x00))
+        && ((EnemyHP_Lv11_Spring() == 0x00) || EnemyHP_Lv11_Spring() >= 0x8000)
+    )
+
   
   // ===========================================
   // [CHEEV-LV12] Level 12 Specific Achievements
   // ===========================================
+  function TearHP_Lv12() => word(0x154576)
   
-  // Oh No! I Just Redecorated!
-   // Complete Level 12 without Destroying any Turrets
-    // Turrets are mapped, I just need to have a hit counter to pop if NONE of the turrets are destroyed.
-  
+  Turrets_Lv12 = [
+    word(0x154662),
+    word(0x154742),
+    word(0x154822),
+    word(0x154902),
+    word(0x1549e2),
+    word(0x154ac2),
+    word(0x154ba2),
+    word(0x154c82),
+    word(0x154d62),
+    word(0x154e42),
+    ]
+
+ achievement(
+    title = "Oh No...! I Just Redecorated!",
+    points = 5,
+    description = "Complete Level 12 without destroying any turrets.",
+    trigger = 
+        once(once(sector_ID() == Kits) && level_ID() == Lv12) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && (never(Frames_Level() == 0x00)) // Reset if Level Restarted
+        && trigger_when((TearHP_Lv12() == 0x00 || TearHP_Lv12() > 0x8000)) // Triggers when Tear is mended
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && none_of(Turrets_Lv12, turret => turret == 0x00)
+        && none_of(Turrets_Lv12, turret => turret > 0x8000)
+    )
+
 // =====================================================
 // [CHEEV_FPP] Floating Point Park-Specific achievements
 // =====================================================
@@ -1222,52 +1500,157 @@ achievement(
   // [CHEEV-LV13] Level 13 Specific Achievements
   // ===========================================
 
-  // How's Your Back, Nine?
-   // Complete Level 13 without falling off the stage
-    // This is hopefully ultimately a copy-and-paste from Level 5's achievement.
    
-  // Be Seeing You!
-   // Destroy the fast-moving ABC in Level 13
-    // Hopefully a simple active check. It DOES respawn, but as most people would only see the unlock once, it shouldn't be a problem.
+   function EnemyHP_Lv13_Golf1() => word(0x153226)
+   function EnemyHP_Lv13_Golf2() => word(0x15331a)
+   function EnemyHP_Lv13_Golf3() => word(0x15340e)
+   function EnemyHP_Lv13_Golf4() => word(0x153502)
+   function EnemyHP_Lv13_Golf5() => word(0x1535f6)
+   function EnemyHP_Lv13_Golf6() => word(0x1536ea)
+   
+   function EnemyHP_Lv13_ABC() => word(0x153132)
+   
 
+achievement(
+    title = "How's Your Back, Nine?",
+    points = 10,
+    description = "Complete Level 13 without falling off the stage.",
+    trigger = 
+        once(once(sector_ID() == FPP && once(level_ID() == Lv13))) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once(Frames_Level() == 0x00) // Sets flag when starting level
+        && (never(Frames_Level() == 0x00)) // Reset if Level Restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && trigger_when(Cutscenes_FPP() == LevelEnd) // Trigger achievement when ending level (icon)
+        && never(Frames_Cutscene() >= 0x8000)
+    )
+    
+achievement(
+    title = "Oh, Great. Another Golf Game",
+    points = 5,
+    description = "Destroy all the Golf Carts in Level 13",
+    trigger = 
+        once(once(sector_ID() == FPP && once(level_ID() == Lv13))) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && (never(Frames_Level() == 0x00)) // Reset if Level Restarted
+        && none_of(CheatFlag, cheat => cheat == 1)
+        && unless(once(level_ID() != Lv13)) // Added because the stupid thing flickers in the wrong level sometimes.
+        && measured(tally(6,
+            (once(once(EnemyHP_Lv13_Golf1() == 0x00) || EnemyHP_Lv13_Golf1() >= 0x8000)),
+            (once(once(EnemyHP_Lv13_Golf2() == 0x00) || EnemyHP_Lv13_Golf2() >= 0x8000)),
+            (once(once(EnemyHP_Lv13_Golf3() == 0x00) || EnemyHP_Lv13_Golf3() >= 0x8000)),
+            (once(once(EnemyHP_Lv13_Golf4() == 0x00) || EnemyHP_Lv13_Golf4() >= 0x8000)),
+            (once(once(EnemyHP_Lv13_Golf5() == 0x00) || EnemyHP_Lv13_Golf5() >= 0x8000)),
+            (once(once(EnemyHP_Lv13_Golf6() == 0x00) || EnemyHP_Lv13_Golf6() >= 0x8000)))
+            ))
+
+achievement(
+    title = "Be Seeing You!",
+    points = 5,
+    description = "Destroy the fast-moving ABC in Level 13.",
+    trigger =
+        once(once(sector_ID() == FPP && once(level_ID() == Lv13))) // Level Check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && (never(Frames_Level() == 0x00)) // Reset if Level Restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
+        && once(once(EnemyHP_Lv13_ABC() == 0x00) || EnemyHP_Lv13_ABC() >= 0x8000)
+    )
+   
     // ===========================================
     // [CHEEV-LV14] Level 14 Specific Achievements
     // ===========================================
-
 
 // ============================================
 // [CHEEV_GPRIME] G-Prime-Specific achievements
 // ============================================
 
-
     // ===========================================
     // [CHEEV-LV15] Level 15 Specific Achievements
     // ===========================================
 
-    // Into Mega-Breath's Lair
-        // Complete Level 15 without losing a life (Must restart level to try again!)
-        // I have this one because of the insta-death crushing things. Players will have to reset the entire level if they want to try again. It will still be a challenge because they'll have to mend all three Tears in one life.
-  
     // ===========================================
     // [CHEEV-LV16] Level 16 Specific Achievements
     // ===========================================
+
+achievement(
+    title = "Into Mega-Breath's Lair",
+    points = 10,
+    description = "Complete Level 16 without losing a life. (Restarts allowed!)",
+    trigger = 
+        once(once(sector_ID() == GPrime && once(level_ID() == Lv16))) // Level check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && once (Frames_Level() == 0x01) // Sets flag when starting level
+        && never (Frames_Level() == 0x00) // Reset if Level Restarted
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat active
+        && trigger_when(Cutscenes_GPrime() == LevelEnd) // Trigger achievement when ending level (icon)
+        && never(once(Lives_GPrime() < prev(Lives_GPrime()))) // Make sure lives don't decrement
+        )
+
+// This is a challenge because of the instant-death crushers. Players will have to get through the ENTIRE level without dying. Restarting level is permitted.
 
     // ===========================================
     // [CHEEV-LV17] Level 17 Specific Achievements
     // ===========================================
 
-    // I'm Outta Here! This Place is Too Hot!
-        // Complete Level 17 without falling on the lava
-        // I do hope this is possible. I will have to analyze values in the level. Be prepared to replace this.
+achievement(
+    title = "I'm Outta Here! This Place is Too Hot!",
+    points = 10,
+    description = "Complete Level 17 without letting your health drop to Yellow.",
+    trigger = 
+        once(once(sector_ID() == GPrime && once(level_ID() == Lv17))) // Level check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat active
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && never(Frames_Level() == 0x00) // Reset on Level Restart
+        && trigger_when(Cutscenes_GPrime() == LevelEnd) // Trigger achievement when level ends
+        && never(once(HP_GPrime() <= HP_Yellow)) // Make sure HP doesn't drop to yellow (666)
+    )
+    
 
     // ===========================================
     // [CHEEV-LV18] Level 18 Specific Achievements
     // ===========================================
-  
-    // Royally Kicked Megabyte's ASCII
-        // Complete Level 18 without letting your health drop to Danger Level.
-        // It SHOULD be nothing more than a simple HP > 0x12B
-  
+function EnemyHP_Megabyte() => word(0x13c052)
+
+achievement(
+    title = "Royally Kicked Megabyte's ASCII",
+    points = 25,
+    description = "Complete Level 18 without letting your health drop to Danger.",
+    trigger = 
+        once(once(sector_ID() == GPrime && once(level_ID() == Lv18))) // Level check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat active
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && never(Frames_Level() == 0x00) // Reset on Level Restart
+        && trigger_when((once(EnemyHP_Megabyte() == 0x00 || EnemyHP_Megabyte() > 0x8000)))//Megabyte ded // Trigger achievement when level ends
+        && never(once(HP_GPrime() <= HP_Danger)) // Make sure HP doesn't drop to Danger
+    )
+
+    
+TurretHack = [
+    byte(0x13c860),
+    byte(0x13c940),
+    byte(0x13ca20),
+    byte(0x13cb00)
+    ]
+ 
+        Hacked = 0x98
+        
+// This is the closest I could figure out to having an apparent consistent value for this status. If this achievement breaks, you know who and what to blame. --Talz
+
+achievement(
+    title = "All Evidence Points to Mouse",
+    points = 5,
+    description = "Turn one of Megabyte's turrets against him.",
+    trigger = 
+        once(once(sector_ID() == GPrime && once(level_ID() == Lv18))) // Level check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay check
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat active
+        && trigger_when(any_of(TurretHack, mouse => mouse == Hacked))
+        && never(once(Ammo_AV_GPrime() == 0x00)) // Hides trigger if you have no Anti-Virus in stock
+    )
 // =============================================
 // [CHEEV_HEX] Lost Angles Specific achievements
 // =============================================
@@ -1275,8 +1658,33 @@ achievement(
   // ===========================================
   // [CHEEV-LV19] Level 19 Specific Achievements
   // ===========================================
-  
-  // Chaos Will Always Triumph Over Order
-   // Complete Level 19 without letting your health drop to Danger Level.
-    // It SHOULD be nothing more than a simple HP > 0x12B
-  
+
+function EnemyHP_Hexadecimal() => word(0x135122)
+
+achievement(
+    title = "Chaos Will Always Triumph Over Order!",
+    points = 25,
+    description = "Complete Level 19 without letting your health drop to Danger.",
+    trigger = 
+        once(once(sector_ID() == Hex && once(level_ID() == Lv19))) // Level check
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat active
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && never(Frames_Level() == 0x00) // Reset on Level Restart
+        && trigger_when((once(EnemyHP_Hexadecimal() == 0x00 || EnemyHP_Hexadecimal() > 0x8000)))// Trigger achievement when level ends
+        && never(once(HP_Hex() <= HP_Danger)) // Make sure HP doesn't drop to Danger
+    )
+    
+achievement(
+    title = "Prime Guardian",
+    points = 50,
+    description = "Beat the game with 20 Lives. You are the true Guardian of Mainframe!",
+    trigger = 
+        once(once(sector_ID() == Hex && once(level_ID() == Lv19)))
+        && Frames_Gameplay() != prev(Frames_Gameplay())
+        && none_of(CheatFlag, cheat => cheat == 1)
+        && once(Frames_Level() == 0x01) // Sets flag when starting level
+        && never(Frames_Level() == 0x00) // Reset on Level Restart
+        && Lives_Hex() == 0x14 // Checks if lives are 20 at the time of Hex's defeat.
+        && trigger_when((once(EnemyHP_Hexadecimal() == 0x00 || EnemyHP_Hexadecimal() > 0x8000)))
+    )
