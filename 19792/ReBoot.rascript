@@ -140,14 +140,14 @@ function level_ID() => dword(0x45ec8)
 // [TIMER] On-Screen Timers
 // ========================
 
-ScreenTimers = [
-ScreenTimer_Baudway => dword(0x1131d8),
-ScreenTimer_CitE => dword(0x112348),
-ScreenTimer_BevHills => dword(0x11329c),
-ScreenTimer_Kits => dword(0x114c80),
-ScreenTimer_FPP => dword(0x11232c),
-ScreenTimer_GPrime => dword(0x1196a0)
-]
+
+function ScreenTimer_Baudway() => dword(0x1131d8)
+function ScreenTimer_CitE() => dword(0x112348)
+function ScreenTimer_BevHills() => dword(0x11329c)
+function ScreenTimer_Kits() => dword(0x114c80)
+function ScreenTimer_FPP() => dword(0x11232c)
+function ScreenTimer_GPrime() => dword(0x1196a0)
+
 
 // ================================
 // [CUTSCENES] Tear/Cutscene Values
@@ -164,6 +164,7 @@ function Cutscenes_FPP() => byte(0x111440)
 function Cutscenes_GPrime() => byte(0x118614)
 
   TearForm = 0x1 // Tear Begins to Form (Triggers cutscene) - Note that if you skip the cutscene, the value flips to $2 for the rest of the form time. Tear is not mendable until $3.
+  TearSkip = 0x02 // Tear cutscene has been skipped. This value can be used to prime Tear-mending achievements as it will flip briefly from 1 to 2, before flipping to next.
   TearBegin = 0x3 // Tear has formed, is mendable, countdown begins
   Dead = 0x4 // Player has died, lose a life, respawn
   TearMend = 0x7 // Tear is Mended. Resets to $1 when the next Tear forms
@@ -672,13 +673,13 @@ achievement(
     description = "Complete Level 1",
     points = 2,
     id = 403312,
-    badge = "456249",
+    badge = "461287",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv1 // Checks if Level is correct
         && (once(Frames_Cutscene() >= End_Primer)) // Checks if the Cutscene Timer has begun to increment past its false-positive safety zone
-        && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-        && never(Gameplay_Active()) // Checks that gameplay is inactive
+        && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0. This is so the achievement is awarded after the ending FMV to not spoil too much.
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Checks that gameplay is inactive
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
     )
  
@@ -687,13 +688,13 @@ achievement(
     description = "Complete Baudway Sector",
     points = 5,
     id = 403313,
-    badge = "456258",
+    badge = "461315",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv3 // Checks if Level is correct
         && (once(Frames_Cutscene() >= End_Primer)) // Checks if the Cutscene Timer has begun to increment past its false-positive safety zone
         && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-        && never(Gameplay_Active()) // Checks that gameplay is inactive
+        && Frames_Gameplay() != prev(Frames_Gameplay()) // Checks that gameplay is inactive
         && (never(Frames_Level() == 0x0)) // To prevent the achievement from popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
     )
@@ -703,7 +704,7 @@ achievement(
     description = "Complete Cit E",
     points = 5,
     id = 403314,
-    badge = "456251",
+    badge = "461318",
     trigger =
         sector_ID() == CitE // Checks if Sector is correct
         && level_ID() == Lv6 // Checks if Level is correct
@@ -720,7 +721,7 @@ achievement(
     description = "Complete Beverly Hills",
     points = 5,
     id = 403315,
-    badge = "457229",
+    badge = "461319",
     trigger =
         sector_ID() == BevHills // Checks if Sector is correct
         && level_ID() == Lv10 // Checks if Level is correct
@@ -736,7 +737,7 @@ achievement(
     description = "Complete Kits Sector",
     points = 5,
     id = 403311,
-    badge = "456257",
+    badge = "461320",
     trigger =
         sector_ID() == Kits // Checks if Sector is correct
         && level_ID() == Lv12 // Checks if Level is correct
@@ -753,7 +754,7 @@ achievement(
     description = "Complete Floating Point Park",
     points = 10,
     id = 403316,
-    badge = "456253",
+    badge = "461322",
     trigger =
         sector_ID() == FPP // Checks if Sector is correct
         && level_ID() == Lv14 // Checks if Level is correct
@@ -770,7 +771,7 @@ achievement(
     description = "Complete G-Prime",
     points = 10,
     id = 403317,
-    badge = "456254",
+    badge = "461325",
     trigger =
         sector_ID() == GPrime// Checks if Sector is correct
         && level_ID() == Lv18 // Checks if Level is correct
@@ -796,7 +797,7 @@ achievement(
     description = "Complete Level 1 without letting any Tears explode",
     points = 5,
     id = 403748,
-    badge = "457034",
+    badge = "461329",
     trigger =
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv1 // Checks if Level is correct
@@ -812,13 +813,12 @@ achievement(
     description = "Complete Baudway Sector without letting any Tears explode",
     points = 5,
     id = 403751,
-    badge = "457037",
+    badge = "461330",
     trigger = 
         sector_ID() == Baudway // Checks if Sector is correct
         && level_ID() == Lv3 // Checks if Level is correct
         && (once(Frames_Cutscene() >= End_Primer))// Checks if the Cutscene Timer has begun to increment
         && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-        && never(Gameplay_Active()) // Checks that gameplay is inactive
         && (never(Frames_Level() == 0x0)) // To prevent the achievement from popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
         && all_of(EndingState_Baudway, end => end == EndGood) // Checks Ending Status
@@ -829,13 +829,12 @@ achievement(
     description = "Complete Cit E without letting any Tears explode",
     points = 10,
     id = 403750,
-    badge = "457036",
+    badge = "461335",
     trigger =
         sector_ID() == CitE // Checks if Sector is correct
         && level_ID() == Lv6 // Checks if Level is correct
         && (once(Frames_Cutscene() >= End_Primer))// Checks if the Cutscene Timer has begun to increment
         && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-        && never(Gameplay_Active()) // Checks that gameplay is inactive
         && (never(Frames_Level() == 0x0)) // To prevent the achievement from popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
         && all_of(EndingState_CitE, end => end == EndGood) // Checks Ending Status
@@ -846,12 +845,11 @@ achievement(
     description = "Complete Beverly Hills without letting any Tears explode",
     points = 10,
     id = 403752,
-    badge = "457038",
+    badge = "461336",
     trigger = sector_ID() == BevHills // Checks if Sector is correct
         && level_ID() == Lv10 // Checks if Level is correct
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused() // Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D
         && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -863,13 +861,12 @@ achievement(
     description = "Complete Kits Sector without letting any Tears explode",
     points = 10,
     id = 403753,
-    badge = "457039",
+    badge = "461488",
     trigger =
         sector_ID() == Kits // Checks if Sector is correct
         && level_ID() == Lv12 // Checks if Level is correct
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused() // Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D
         && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -885,7 +882,6 @@ achievement(
         && level_ID() == Lv14 // Checks if Level is correct
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused() // Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D
         && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -901,7 +897,6 @@ achievement(
         && level_ID() == Lv18 // Checks if Level is correct
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused() // Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D
         && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -921,14 +916,13 @@ achievement(
     type = "win_condition",
     points = 25,
     id = 403754,
-    badge = "457040",
+    badge = "461490",
     trigger = 
         never(sum_of(EndingState_Final,ending=>prev(ending)) != sum_of(EndingState_Final,ending=>ending)) // Resets whenever a level is cleared
         && tally_of(EndingState_Final,19,ending=>once(ending == EndGood)) // Only triggers when EVERY level has a value of 2 (Good Ending)
         && none_of(EndingState_Final,ending=>ending==0) // Makes sure all levels are cleared.
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused()// Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D
         && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1)// Disables Achievement if any Cheat Active
@@ -937,7 +931,7 @@ achievement(
 achievement( title = "Prepare Yourselves... For the Hunt",
     description = "Win the game with the Bad Ending. It sure would be awful if the game ended on a cliffhanger, huh?",
     id = 403318,
-    badge = "456255",
+    badge = "461328",
     type = "win_condition",
     points = 10,
     trigger =
@@ -947,7 +941,6 @@ achievement( title = "Prepare Yourselves... For the Hunt",
         && none_of(EndingState_Final,ending=>ending==0) // Makes sure all levels are cleared.
         && (once(Frames_Cutscene() > End_Primer) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger) // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused()// Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1)// Disables Achievement if any Cheat Active
     )
@@ -963,7 +956,6 @@ achievement(
         && none_of(EndingState_Final,ending=>ending==0) // Makes sure all levels are cleared.
         && (once(Frames_Cutscene() > End_Primer)) // Checks if the Cutscene Timer is incrementing past its 'safe zone'.
         && Frames_Cutscene() == End_Trigger // Checks if the Cutscene Timer has reset to 0.
-        && Gameplay_Paused() // Checks to see if gameplay is paused. (Using this combination shouldn't cause the achievement to pop when in the pause menu)
         && Frames_Level() > 0x22D && (never(Frames_Level() == 0x0)) // A quick flag to fix an issue of the achievement popping in the level's opening cutscene
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
     )
@@ -1015,6 +1007,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Mortar, boom => boom == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1025,6 +1018,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Vamp, bleh => bleh == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1035,6 +1029,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Flame, whoosh => whoosh == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1045,6 +1040,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Box, boing => boing == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1055,6 +1051,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_AV, antique => antique == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1065,6 +1062,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Blaster, bang => bang == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
     
 achievement (
@@ -1075,6 +1073,7 @@ achievement (
         Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
         && any_of(Weapons_Rocket, woof => woof == 1)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
 
 achievement (
@@ -1082,16 +1081,16 @@ achievement (
     description = "Obtain all weapons, upgrades, and Glitch items.",
     points = 10,
     trigger =
-        Frames_Gameplay() != prev(Frames_Gameplay())
+        (Frames_Gameplay() != prev(Frames_Gameplay())
         && never(Frames_Level() == 0x00) // Resets when level is restarted
-        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
-        && (all_of(Weapons_Baudway, blam => blam == 1)
-        || all_of(Weapons_CitE, blam => blam == 1)
-        || all_of(Weapons_BevHills, blam => blam == 1)
-        || all_of(Weapons_Kits, blam => blam == 1)
-        || all_of(Weapons_FPP, blam => blam == 1)
-        || all_of(Weapons_GPrime, blam => blam == 1)
-        || all_of(Weapons_Hex, blam => blam == 1))
+        && none_of(CheatFlag, cheat => cheat == 1)) // Disables achievement if any cheat is active.
+        && ((sector_ID() == Baudway && all_of(Weapons_Baudway, blam => blam == 1))
+        || (sector_ID() == CitE && all_of(Weapons_CitE, blam => blam == 1))
+        || (sector_ID() == BevHills && all_of(Weapons_BevHills, blam => blam == 1))
+        || (sector_ID() == Kits && all_of(Weapons_Kits, blam => blam == 1))
+        || (sector_ID() == FPP && all_of(Weapons_FPP, blam => blam == 1))
+        || (sector_ID() == GPrime && all_of(Weapons_GPrime, blam => blam == 1))
+        || (sector_ID() == Hex && all_of(Weapons_Hex, blam => blam == 1)))
     )
 
 // =====================================
@@ -1103,7 +1102,7 @@ achievement(
     description = "Congratulations! You've activated a Cheat Code! All other achievements are locked until you reset. Have fun!",
     points = 0,
     id = 403755,
-    badge = "457041",
+    badge = "461493",
     trigger =
         sector_ID() == Menu && level_ID() == MM // Verifies the user is on the main menu
         && any_of(CheatFlag, cheat => cheat == 1) // Checks if ANY cheat is enabled.)
@@ -1146,21 +1145,6 @@ sector_ID() == Baudway // Checks if Sector is correct
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
         && (EndingState_Lv1 == EndBad) // Checks Ending Status
     )
-// =====================================================================
-// [CHEEV_CHALLENGE] - Challenges that don't fit in any specific sector
-// =====================================================================
-
-achievement (
-title = "To Mend and Defend",
-points = 10,
-description = "Mend a Tear within one second of its forming.",
-trigger = 
-        Frames_Gameplay() != prev(Frames_Gameplay())
-        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
-        && any_of(TearStatus, tear => tear == 0x7) // Checks for Tear status.
-        && never(TearStatus, tear => tear == 0x1) // Resets when a Tear spawns
-        && tally,(30(any_of(ScreenTimers, tick => tick == (prev(Frames_Gameplay())))))
-)
 
 // ==========================================
 // [CHEEV_BAUD] Baudway-Specific Achievements
@@ -1176,7 +1160,7 @@ achievement( title = "Where DOES He Get Those ABCs?",
     description = "Destroy the Armored Binome Carrier in Level 1",
     points = 2,
     id = 403749,
-    badge = "457035",
+    badge = "461489",
     trigger =
         once(sector_ID() == Baudway) && (level_ID() == Lv1) // Check for correct Sector and Level IDs
         && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if any Cheat Active
@@ -1371,10 +1355,7 @@ function BossTear_MegABC() => word(0x166eaa)
         && never(BossHP_MegABC() == 0x00 || BossHP_MegABC() > 0x8000)
         && trigger_when((once(BossTear_MegABC() == 0x00 || BossTear_MegABC() > 0x8000))) // Triggers when Tear is Mended.
     )
- // Treacherous Dogs!
-  // Complete Level 6 without destroying the MEG-ABC 
-   // I can hopefully copy-paste the code from the Squidface achievement
-  
+   
 // ====================================================
 // [CHEEV_BEVHILLS] Beverly Hills-Specific achievements
 // ====================================================
@@ -1455,6 +1436,7 @@ function EnemyHP_Lv11_Spring() => word(0x169e9a) // Fun fact, this is the last r
         && Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check
         && (never(Frames_Level() == 0x00))
         && ((EnemyHP_Lv11_Spring() == 0x00) || EnemyHP_Lv11_Spring() >= 0x8000)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if any cheat is active.
     )
 
   
@@ -1477,7 +1459,7 @@ function EnemyHP_Lv11_Spring() => word(0x169e9a) // Fun fact, this is the last r
     ]
 
  achievement(
-    title = "Oh No...! I Just Redecorated!",
+    title = "Stomp On My Apartment?! I Don't Think So",
     points = 5,
     description = "Complete Level 12 without destroying any turrets.",
     trigger = 
@@ -1493,8 +1475,6 @@ function EnemyHP_Lv11_Spring() => word(0x169e9a) // Fun fact, this is the last r
 // =====================================================
 // [CHEEV_FPP] Floating Point Park-Specific achievements
 // =====================================================
-
-
 
   // ===========================================
   // [CHEEV-LV13] Level 13 Specific Achievements
@@ -1688,3 +1668,128 @@ achievement(
         && Lives_Hex() == 0x14 // Checks if lives are 20 at the time of Hex's defeat.
         && trigger_when((once(EnemyHP_Hexadecimal() == 0x00 || EnemyHP_Hexadecimal() > 0x8000)))
     )
+    
+    
+// =====================================================================
+// [CHEEV_CHALLENGE] - Challenges that don't fit in any specific sector
+// =====================================================================
+
+achievement (
+    title = "To Mend and Defend",
+    points = 10,
+    description = "Mend a Tear within one second of its forming.",
+    trigger = 
+        Frames_Gameplay() != prev(Frames_Gameplay()) // Gameplay Check (Core Constant)
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables Achievement if Cheats Active
+        && never(once(sector_ID() == Baudway) // Checks for correct Sector
+            && (Cutscenes_Baudway() == TearForm)) // Resets whole achievement when a Tear spawns (one for each Sector)
+        && never(once(sector_ID() == CitE)
+            && (Cutscenes_CitE() == TearForm))
+        && never(once(sector_ID() == BevHills)
+            && (Cutscenes_BevHills() == TearForm))
+        && never(once(sector_ID() == Kits)
+            && (Cutscenes_Kits() == TearForm))
+        && never(once(sector_ID() == FPP)
+            && (Cutscenes_FPP() == TearForm))
+        && never(once(sector_ID() == GPrime)
+            && (Cutscenes_GPrime() == TearForm))
+       
+       // Begin Baudway Addresses
+        && (((once(Cutscenes_Baudway() == TearSkip) // Sets primer flag when Tear is almost done forming.
+        && unless(repeated(30, once(sector_ID() == Baudway) // Pauses after 1 second (30 gameplay frames)
+        && ScreenTimer_Baudway() < prev(ScreenTimer_Baudway())))) // Checks if timer is ticking.
+        && trigger_when(Cutscenes_Baudway() == TearMend)) // Triggers achievement when conditions are met and Tear is Mended.
+        
+        // Begin Cit E Addresses
+        || ((once(Cutscenes_CitE() == TearSkip)
+        && unless(repeated(30, once(sector_ID() == CitE)
+        && ScreenTimer_CitE() < prev(ScreenTimer_CitE()))))
+        && trigger_when(Cutscenes_CitE() == TearMend))
+        
+        // Begin Beverly Hills Addresses
+        || ((once(Cutscenes_BevHills() == TearSkip)
+        && unless(repeated(30, once(sector_ID() == BevHills)
+        && ScreenTimer_BevHills() < prev(ScreenTimer_BevHills()))))
+        && trigger_when(Cutscenes_BevHills() == TearMend))
+        
+        // Kits is skipped because of the nature of the levels (timers spawn when you get closer)
+                
+        // Begin Floating Point Park Addresses
+        || ((once(Cutscenes_FPP() == TearSkip)
+        && unless(repeated(30, once(sector_ID() == FPP)
+        && ScreenTimer_FPP() < prev(ScreenTimer_FPP()))))
+        && trigger_when(Cutscenes_FPP() == TearMend))
+        
+        // Begin G-Prime Addresses
+        || ((once(Cutscenes_GPrime() == TearSkip)
+        && unless(repeated(30, once(sector_ID() == GPrime)
+        && ScreenTimer_GPrime() < prev(ScreenTimer_FPP()))))
+        && trigger_when(Cutscenes_GPrime() == TearMend)))
+        )
+        
+achievement( 
+    title = "Tear-rorist",
+    description = "Mend a Tear with less than 1 second remaining.",
+    points = 10,
+    trigger = Frames_Gameplay() != prev(Frames_Gameplay())
+        && none_of(CheatFlag, cheat => cheat == 1)
+            
+        // Begin Baudway Addresses
+        && (ScreenTimer_Baudway() <= 0x1e
+        && (once(Cutscenes_Baudway() == TearMend))
+                
+        // Begin Cit E Addresses
+        || (ScreenTimer_CitE() <= 0x1e
+        && (once(Cutscenes_CitE() == TearMend))
+        || level_ID() == Lv6 && ScreenTimer_CitE() <= 0x1e && word(0x166EAA) > 0x8000) // A patch so that the boss battle Tear can also trigger it.
+        
+        // Begin Beverly Hills Addresses
+        || (ScreenTimer_BevHills() <= 0x1e
+        && (once(Cutscenes_BevHills() == TearMend))
+        || level_ID() == Lv10 && ScreenTimer_BevHills() <= 0x1e && word(0x14dfd2) > 0x8000)
+
+        // Begin Kits Addresses
+        || (ScreenTimer_Kits() <= 0x1e
+        && (once(Cutscenes_Kits() == TearMend))
+        || level_ID() == Lv12 && ScreenTimer_Kits() <= 0x1e && word(0x154576) > 0x8000)
+        
+        // Begin Floating Point Park Addresses
+        || (ScreenTimer_FPP() <= 0x1e
+        && (once(Cutscenes_FPP() == TearMend)))
+        
+        // Begin G-Prime Addresses
+        || (ScreenTimer_GPrime() <= 0x1e
+        && (once(Cutscenes_GPrime() == TearMend)))
+        )
+        )
+        
+achievement(
+    title = "Racing the Clock",
+    description = "Complete the game in one session in less than 2 hours. (No Saving or Loading!)",
+    points = 25,
+    trigger = 
+        never(sector_ID() == 0x00) // Resets if player ever goes to the main menu.
+        && none_of(CheatFlag, cheat => cheat == 1) // Disables achievement if cheats are active
+        && once(once(level_ID() == 0x01 && Cutscenes_Baudway() == LevelEnd)) // Gives a hit upon completing level
+        && once(once(level_ID() == 0x02 && Cutscenes_Baudway() == LevelEnd))
+        && once(once(level_ID() == 0x03 && Cutscenes_Baudway() == LevelEnd))
+        && once(once(level_ID() == 0x04 && Cutscenes_CitE() == LevelEnd))
+        && once(once(level_ID() == 0x05 && Cutscenes_CitE() == LevelEnd))
+        && once(once(level_ID() == 0x06 && EndingState_Lv6 != 0x0)) // Variables are different due to how boss battles work. This method would not be reliable for the regular levels as this status can be saved. Mixing them in with the Cutscenes method seems the best way.
+        && once(once(level_ID() == 0x07 && Cutscenes_BevHills() == LevelEnd))
+        && once(once(level_ID() == 0x08 && Cutscenes_BevHills() == LevelEnd))
+        && once(once(level_ID() == 0x09 && Cutscenes_BevHills() == LevelEnd))
+        && once(once(level_ID() == 0x0A && EndingState_Lv10 != 0x0))
+        && once(once(level_ID() == 0x0B && Cutscenes_Kits() == LevelEnd))
+        && once(once(level_ID() == 0x0C && EndingState_Lv12 != 0x0))
+        && once(once(level_ID() == 0x0D && Cutscenes_FPP() == LevelEnd))
+        && once(once(level_ID() == 0x0E && EndingState_Lv14 != 0x0))
+        && once(once(level_ID() == 0x0F && Cutscenes_GPrime() == LevelEnd))
+        && once(once(level_ID() == 0x10 && Cutscenes_GPrime() == LevelEnd))
+        && once(once(level_ID() == 0x11 && Cutscenes_GPrime() == LevelEnd))
+        && once(once(level_ID() == 0x12 && EndingState_Lv18 != 0x0))
+        && once(once(level_ID() == 0x13 && EndingState_Lv19 != 0x0))
+        && Frames_Gameplay() < 0x69780 // Gameplay must be under two hours. Note that pause and cutscenes are not counted. There's no way around it, there's no apparent value in the game that is steady throughout the entire game.
+    )
+    
+    // Well, this set was in some ways a nightmare. And think about it, this was my very first RetroAchievements set. I've been told that a complex game like this might make things easier in the long run, but I'll have to look back and see if this taught me any bad habits. If you master this, I probably owe you a drink. #BringBackReBoot   -- Talz
